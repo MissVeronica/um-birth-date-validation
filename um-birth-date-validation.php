@@ -2,7 +2,7 @@
 /**
  * Plugin Name:     Ultimate Member - Birth Date Validation
  * Description:     Extension to Ultimate Member for Birth Date Validation and disables the date picker for birth date field.
- * Version:         1.0.0
+ * Version:         1.1.0
  * Requires PHP:    7.4
  * Author:          Miss Veronica
  * License:         GPL v2 or later
@@ -48,10 +48,13 @@ Class UM_Birth_Date_Validation {
 
         if ( isset( $submitted_data['birth_date'] )) {
 
-            if (! preg_match( '~^([0-9]{4})/([0-9]{2})/([0-9]{2})$~', $submitted_data['birth_date'], $parts )) {
+            if ( empty( $submitted_data['birth_date'] )) {
+                UM()->form()->add_error( 'birth_date', __( 'The date of birth is empty. Valid date format is YYYY/MM/DD', 'ultimate-member' ));
+
+            } elseif (! preg_match( '~^([0-9]{4})/([0-9]{2})/([0-9]{2})$~', $submitted_data['birth_date'], $parts )) {
                 UM()->form()->add_error( 'birth_date', sprintf( __( 'The date of birth is not a valid date in the format YYYY/MM/DD "%s"', 'ultimate-member' ), esc_attr( $submitted_data['birth_date'] )));
 
-            } elseif ( ! checkdate( $parts[2], $parts[3], $parts[1] ) || $parts[1] > date( 'Y', time())) {
+            } elseif ( ! checkdate( $parts[2], $parts[3], $parts[1] )) {
                 UM()->form()->add_error( 'birth_date', sprintf( __( 'The date of birth is invalid "%s"', 'ultimate-member' ), esc_attr( $submitted_data['birth_date'] )));
 
             } else {
@@ -65,6 +68,12 @@ Class UM_Birth_Date_Validation {
 
                 if ( $dob <= $max_dob_limit ) {
                     UM()->form()->add_error( 'birth_date', sprintf( __( 'The date of birth is invalid ( older than %s years ).', 'ultimate-member' ), esc_attr( $max_years )));
+
+                } else {
+
+                    if ( $submitted_data['birth_date'] >= date_i18n( 'Y/m/d', current_time( 'timestamp' )) ) {
+                        UM()->form()->add_error( 'birth_date', sprintf( __( 'The date of birth is not a past date "%s". Valid date format is YYYY/MM/DD', 'ultimate-member' ), esc_attr( $submitted_data['birth_date'] )));
+                    }
                 }
             }
         }
