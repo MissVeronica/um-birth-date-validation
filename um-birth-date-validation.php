@@ -2,7 +2,7 @@
 /**
  * Plugin Name:     Ultimate Member - Birth Date Validation
  * Description:     Extension to Ultimate Member for Birth Date Validation and disables the date picker for birth date field.
- * Version:         1.1.0
+ * Version:         1.2.0
  * Requires PHP:    7.4
  * Author:          Miss Veronica
  * License:         GPL v2 or later
@@ -48,14 +48,20 @@ Class UM_Birth_Date_Validation {
 
         if ( isset( $submitted_data['birth_date'] )) {
 
+            $birth_date = $submitted_data['birth_date'];
+
+            if ( strlen( $submitted_data['birth_date'] ) == 8 ) {
+                $submitted_data['birth_date'] = substr( $submitted_data['birth_date'], 0, 4 ) .'/' . substr( $submitted_data['birth_date'], 4, 2 ) .'/' . substr( $submitted_data['birth_date'], 6 );
+            }
+
             if ( empty( $submitted_data['birth_date'] )) {
                 UM()->form()->add_error( 'birth_date', __( 'The date of birth is empty. Valid date format is YYYY/MM/DD', 'ultimate-member' ));
 
-            } elseif (! preg_match( '~^([0-9]{4})/([0-9]{2})/([0-9]{2})$~', $submitted_data['birth_date'], $parts )) {
-                UM()->form()->add_error( 'birth_date', sprintf( __( 'The date of birth is not a valid date in the format YYYY/MM/DD "%s"', 'ultimate-member' ), esc_attr( $submitted_data['birth_date'] )));
+            } elseif ( ! preg_match( '~^([0-9]{4})/([0-9]{2})/([0-9]{2})$~', $submitted_data['birth_date'], $parts )) {
+                UM()->form()->add_error( 'birth_date', sprintf( __( 'The date of birth is not a valid date in the format YYYY/MM/DD "%s"', 'ultimate-member' ), esc_attr( $birth_date )));
 
             } elseif ( ! checkdate( $parts[2], $parts[3], $parts[1] )) {
-                UM()->form()->add_error( 'birth_date', sprintf( __( 'The date of birth is invalid "%s"', 'ultimate-member' ), esc_attr( $submitted_data['birth_date'] )));
+                UM()->form()->add_error( 'birth_date', sprintf( __( 'The date of birth is invalid "%s"', 'ultimate-member' ), esc_attr( $birth_date )));
 
             } else {
 
@@ -72,7 +78,7 @@ Class UM_Birth_Date_Validation {
                 } else {
 
                     if ( $submitted_data['birth_date'] >= date_i18n( 'Y/m/d', current_time( 'timestamp' )) ) {
-                        UM()->form()->add_error( 'birth_date', sprintf( __( 'The date of birth is not a past date "%s". Valid date format is YYYY/MM/DD', 'ultimate-member' ), esc_attr( $submitted_data['birth_date'] )));
+                        UM()->form()->add_error( 'birth_date', sprintf( __( 'The date of birth is not a past date "%s". Valid date format is YYYY/MM/DD', 'ultimate-member' ), esc_attr( $birth_date )));
                     }
                 }
             }
