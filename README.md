@@ -17,6 +17,7 @@ Extension to Ultimate Member for Birth Date Validation and disables the date pic
 
 ## Updates
 1. Version 1.1.0 Additional error messages. Harder past date test.
+2. Version 1.2.0 Include accept of format YYYYMMDD
 
 ## Installation
 1. Install by downloading the plugin ZIP file and install as a new Plugin, which you upload in WordPress -> Plugins -> Add New -> Upload Plugin.
