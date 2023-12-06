@@ -2,7 +2,7 @@
 /**
  * Plugin Name:     Ultimate Member - Birth Date Validation
  * Description:     Extension to Ultimate Member for Birth Date Validation and disables the date picker for birth date field.
- * Version:         1.2.0
+ * Version:         1.3.0
  * Requires PHP:    7.4
  * Author:          Miss Veronica
  * License:         GPL v2 or later
@@ -50,8 +50,8 @@ Class UM_Birth_Date_Validation {
 
             $birth_date = $submitted_data['birth_date'];
 
-            if ( strlen( $submitted_data['birth_date'] ) == 8 ) {
-                $submitted_data['birth_date'] = substr( $submitted_data['birth_date'], 0, 4 ) .'/' . substr( $submitted_data['birth_date'], 4, 2 ) .'/' . substr( $submitted_data['birth_date'], 6 );
+            if ( strlen( $submitted_data['birth_date'] ) == 8 && is_numeric( $submitted_data['birth_date'] )) {
+                $submitted_data['birth_date'] = substr( $submitted_data['birth_date'], 0, 4 ) . '/' . substr( $submitted_data['birth_date'], 4, 2 ) . '/' . substr( $submitted_data['birth_date'], 6 );
             }
 
             if ( empty( $submitted_data['birth_date'] )) {
